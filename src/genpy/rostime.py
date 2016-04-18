@@ -35,6 +35,7 @@ ROS Time representation, including Duration
 """
 
 import sys
+import warnings
 
 if sys.version > '3': 
     long = int
@@ -395,6 +396,11 @@ class Duration(TVal):
         """
         t = type(val)
         if t in (int, long):
+            warnings.warn(
+                'The Duration.__floor_div__(integer) function is ill-defined. '
+                'The floor operation is applied independently on the seconds as well as the nanoseconds. '
+                'Use `/` (also requires `from __future__ import division` in Python 2) or `__truediv__` instead.',
+                category=RuntimeWarning)
             return Duration(self.secs // val, self.nsecs // val)
         elif t == float:
             return Duration.from_sec(self.to_sec() // val)
@@ -413,6 +419,11 @@ class Duration(TVal):
         # PEP 238
         t = type(val)
         if t in (int, long):
+            warnings.warn(
+                'The Duration.__div__(integer) function is ill-defined. '
+                'The floor operation is applied independently on the seconds as well as the nanoseconds. '
+                'Use `from __future__ import division` in Python 2 or `__truediv__` instead.',
+                category=RuntimeWarning)
             return Duration(self.secs // val, self.nsecs // val)
         elif t == float:
             return Duration.from_sec(self.to_sec() / val)
