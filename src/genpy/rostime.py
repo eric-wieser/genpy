@@ -228,9 +228,6 @@ class Time(TVal):
         """
         return self.to_sec()
 
-    def __hash__(self):
-        return super(Time, self).__hash__()
-
     def __repr__(self):
         return "genpy.Time[%d]"%self.to_nsec()
 
@@ -281,6 +278,9 @@ class Time(TVal):
             return False
         return self.secs == other.secs and self.nsecs == other.nsecs
 
+    # setting __eq__ in python 3 forces hash to be redeclared
+    __hash__ = TVal.__hash__
+
 class Duration(TVal):
     """
     Duration represents the ROS 'duration' primitive, which consists
@@ -309,9 +309,6 @@ class Duration(TVal):
         support for Python pickling
         """
         self.secs, self.nsecs = state
-
-    def __hash__(self):
-        return super(Duration, self).__hash__()
 
     def __repr__(self):
         return "genpy.Duration[%d]"%self.to_nsec()
@@ -441,3 +438,6 @@ class Duration(TVal):
         if not isinstance(other, Duration):
             return False
         return self.secs == other.secs and self.nsecs == other.nsecs
+
+    # setting __eq__ in python 3 forces hash to be redeclared
+    __hash__ = TVal.__hash__
